@@ -1,4 +1,4 @@
-FROM spark-py:1.0
+FROM spark-py:11.0-jdk-slim-buster
 
 ENV HADOOP_VERSION=3.3.1
 ENV HADOOP_HOME /opt/hadoop-${HADOOP_VERSION}
@@ -24,7 +24,6 @@ RUN apt-get install -y \
       iptraf \
       tcpdump \
       htop \
-      bind9-dnsutils \
       inetutils-ping
 
 RUN bash -c 'echo "LC_ALL=en_US.UTF-8" >> /etc/environment' ; \
@@ -33,7 +32,7 @@ RUN bash -c 'echo "LC_ALL=en_US.UTF-8" >> /etc/environment' ; \
 
 RUN locale-gen en_US.UTF-8
 
-### Install HADOOP
+# Install HADOOP
 RUN curl -O https://dist.apache.org/repos/dist/release/hadoop/common/KEYS
 RUN gpg --import KEYS
 
@@ -49,9 +48,15 @@ RUN set -x \
     && tar -xvf /tmp/hadoop.tar.gz -C /opt/ \
     && rm /tmp/hadoop.tar.gz*
 
-### Download JAVA packages
-RUN cd /opt/spark ; \
-    echo "System.exit(0)" > /tmp/exit.scala ; \
-    ./bin/spark-shell  --packages org.apache.hadoop:hadoop-aws:$HADOOP_VERSION,org.apache.hadoop:hadoop-client:$HADOOP_VERSION,org.apache.hadoop:hadoop-common:$HADOOP_VERSION,io.delta:delta-core_2.12:1.0.0,org.apache.iceberg:iceberg-spark3-runtime:0.12.0 \
-                      -i /tmp/exit.scala
+RUN cd $SPARK_HOME ; mkdir conf
 
+COPY spark-env.sh $SPARK_HOME/conf
+
+### Download JAVA packages
+RUN cd $SPARK_HOME ; \
+    echo "System.exit(0)" > /tmp/exit.scala ; \
+    ./bin/spark-shell  --packages "org.apache.hadoop:hadoop-aws:$HADOOP_VERSION,org.apache.hadoop:hadoop-client:$HADOOP_VERSION,org.apache.hadoop:hadoop-common:$HADOOP_VERSION,io.delta:delta-core_2.12:1.0.0,org.apache.iceberg:iceberg-spark3-runtime:0.12.0" \
+                      -i /tmp/exit.scala ; \
+    rm /tmp/exit.scala
+
+RUN mv $HOME/.ivy2/jars/* $SPARK_HOME/jars
