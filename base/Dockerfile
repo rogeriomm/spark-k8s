@@ -32,6 +32,9 @@ RUN bash -c 'echo "LC_ALL=en_US.UTF-8" >> /etc/environment' ; \
 
 RUN locale-gen en_US.UTF-8
 
+# Delta, Iceberg, AWS S3
+COPY dependencies/target/dependency/*.jar $SPARK_HOME/jars/
+
 # Install HADOOP
 RUN curl -O https://dist.apache.org/repos/dist/release/hadoop/common/KEYS
 RUN gpg --import KEYS
@@ -48,15 +51,6 @@ RUN set -x \
     && tar -xvf /tmp/hadoop.tar.gz -C /opt/ \
     && rm /tmp/hadoop.tar.gz*
 
-RUN cd $SPARK_HOME ; mkdir conf
+RUN mkdir $SPARK_HOME/conf
 
 COPY spark-env.sh $SPARK_HOME/conf
-
-### Download JAVA packages
-RUN cd $SPARK_HOME ; \
-    echo "System.exit(0)" > /tmp/exit.scala ; \
-    ./bin/spark-shell  --packages "org.apache.hadoop:hadoop-aws:$HADOOP_VERSION,org.apache.hadoop:hadoop-client:$HADOOP_VERSION,org.apache.hadoop:hadoop-common:$HADOOP_VERSION,io.delta:delta-core_2.12:1.0.0,org.apache.iceberg:iceberg-spark3-runtime:0.12.0" \
-                      -i /tmp/exit.scala ; \
-    rm /tmp/exit.scala
-
-RUN mv $HOME/.ivy2/jars/* $SPARK_HOME/jars

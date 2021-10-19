@@ -20,3 +20,5 @@ helm install my-release spark-operator/spark-operator --namespace spark-operator
    * [Learn How to Mount a Local Drive in a Pod in Minikube ](https://dev.to/coherentlogic/learn-how-to-mount-a-local-drive-in-a-pod-in-minikube-2020-3j48)
    * https://spark.apache.org/docs/latest/running-on-kubernetes.html#submitting-applications-to-kubernetes
    * https://doc.lucidworks.com/spark-guide/11031/running-spark-on-kubernetes
+   *  https://www.youtube.com/watch?v=8oo6WEgsOvg&list=WL&index=46&t=3904s: Novos Recursos do Delta Lake 1.0 com Apache Spark
+      * https://bitbucket.org/luanmoreno/live/src/master/pyspark-yelp-elt-py/
