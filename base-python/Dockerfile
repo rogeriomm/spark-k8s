@@ -1,7 +1,7 @@
-ARG USERNAME
+ARG REPO
 ARG TAG
 
-FROM $USERNAME/spark-base:$TAG
+FROM ${REPO}spark-base:$TAG
 
 ########################################################################################################################
 # Install conda to manage python and R packages
