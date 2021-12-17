@@ -54,3 +54,6 @@ RUN set -x \
 RUN mkdir $SPARK_HOME/conf
 
 COPY spark-env.sh $SPARK_HOME/conf
+
+# Overwrite TLS key store with our updates
+COPY cacerts $JAVA_HOME/lib/security/cacerts

@@ -14,7 +14,22 @@ helm repo add spark-operator https://googlecloudplatform.github.io/spark-on-k8s-
 helm install my-release spark-operator/spark-operator --namespace spark-operator --create-namespace
 ```
 
+# TLS certificates (MINIO)
+    * Generating a key store using a pod
+```commandline
+ls $JAVA_HOME/lib/security/cacerts
+echo "Use password 'changeit'"
+keytool -cacerts -importcert -alias minio-cert -file /lab/public.crt
+keytool -cacerts -list | grep minio-cert
+echo "Copy keystore with Minio certificate"
+cp $JAVA_HOME/lib/security/cacerts /lab/
+```
 
+# Issues
+## com.amazonaws.SdkClientException: Unable to execute HTTP request: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target: Unable to execute HTTP request: PKIX path building failed
+   * https://github.com/aws/aws-sdk-java/issues/2087: AmazonRDSClient.java: Unable to execute HTTP request: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+   * https://community.cloudera.com/t5/Community-Articles/How-to-configure-your-spark-application-to-use-Mongo-DB-with/ta-p/247296
+      * 5) Zeppelin (Optional)
 # References
    * [(MEDIUM) Build Your Own Big Data Ecosystem — Part 1](https://medium.com/geekculture/build-your-own-big-data-ecosystem-part-1-a19e4c778632)
    * [Learn How to Mount a Local Drive in a Pod in Minikube ](https://dev.to/coherentlogic/learn-how-to-mount-a-local-drive-in-a-pod-in-minikube-2020-3j48)
