@@ -14,14 +14,20 @@ helm repo add spark-operator https://googlecloudplatform.github.io/spark-on-k8s-
 helm install my-release spark-operator/spark-operator --namespace spark-operator --create-namespace
 ```
 
-# TLS certificates (MINIO)
-    * Generating a key store using a pod
+# AWS client cli
+```text
+AWS access key: minio
+AWS secret access key: awesomes3
+```
+
+# TLS certificates MINIO
+    * Generating a key store using an existing pod
 ```commandline
 ls $JAVA_HOME/lib/security/cacerts
 echo "Use password 'changeit'"
 keytool -cacerts -importcert -alias minio-cert -file /lab/public.crt
 keytool -cacerts -list | grep minio-cert
-echo "Copy keystore with Minio certificate"
+echo "Copy keystore with bundled MINIO certificate"
 cp $JAVA_HOME/lib/security/cacerts /lab/
 ```
 
