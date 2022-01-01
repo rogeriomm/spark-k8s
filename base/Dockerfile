@@ -56,12 +56,12 @@ RUN mkdir $SPARK_HOME/conf
 
 COPY spark-env.sh $SPARK_HOME/conf
 
-# Overwrite TLS key store with our updates
-COPY certs/cacerts $JAVA_HOME/lib/security/cacerts
-
 # Add self signed certificates
 COPY certs/*.crt /usr/local/share/ca-certificates/
 RUN update-ca-certificates
+
+# Set AWS cli TLS CA certificate
+ENV AWS_CA_BUNDLE=/usr/local/share/ca-certificates/minikube-ca.crt/minikube-ca.crt
 
 # Install aws client cli
 WORKDIR /tmp

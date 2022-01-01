@@ -1,3 +1,6 @@
+#
+# TODO: /opt/conda/envs/python_3_with_R/ssl/cacert.pem
+#
 ARG REPO
 ARG TAG
 
@@ -29,6 +32,7 @@ RUN set -ex && \
     # Allow to modify conda packages. This allows malicious code to be injected into other interpreter sessions, therefore it is disabled by default
     # chmod -R ug+rwX /opt/conda
 ENV PATH /opt/conda/envs/python_3_with_R/bin:/opt/conda/bin:$PATH
+# Add CONDA self signed certificates
 
 ########################################################################################################################
 # Some python packages are not available via conda, so we are using pip

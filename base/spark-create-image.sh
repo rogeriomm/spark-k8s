@@ -5,6 +5,9 @@
 # -m                    Use minikube's Docker daemon.
 #
 
+set -x
+set -e
+
 HADOOP_VERSION=3.3.1
 
 cd dependencies
