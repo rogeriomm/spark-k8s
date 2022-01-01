@@ -27,8 +27,15 @@ ls $JAVA_HOME/lib/security/cacerts
 echo "Use password 'changeit'"
 keytool -cacerts -importcert -alias minio-cert -file /lab/public.crt
 keytool -cacerts -list | grep minio-cert
+keytool -list -v -keystore $JAVA_HOME/jre/lib/security/cacerts
+
 echo "Copy keystore with bundled MINIO certificate"
 cp $JAVA_HOME/lib/security/cacerts /lab/
+```
+
+```commandline
+cd base/certs
+keytool -list -v -keystore cacerts
 ```
 
 # Issues
