@@ -22,10 +22,7 @@ cd ../../spark
 if [ -d ./dist ]; then
   cd dist
 
-  SPARK_HOME=`pwd`
-
-  #14-jre-slim   14.0-jdk-slim-buster
-  TAG=11.0-jdk-slim-buster
+  TAG=11.0-jdk-slim-bullseye
   ./bin/docker-image-tool.sh "$@" \
                            -t $TAG \
                            -p kubernetes/dockerfiles/spark/bindings/python/Dockerfile \

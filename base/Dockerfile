@@ -1,4 +1,4 @@
-FROM spark-py:11.0-jdk-slim-buster
+FROM spark-py:11.0-jdk-slim-bullseye
 
 ENV HADOOP_VERSION=3.3.1
 ENV HADOOP_HOME /opt/hadoop-${HADOOP_VERSION}
@@ -56,20 +56,13 @@ RUN mkdir $SPARK_HOME/conf
 
 COPY spark-env.sh $SPARK_HOME/conf
 
-# Add self signed certificates
-COPY certs/*.crt /usr/local/share/ca-certificates/
+COPY files/ /
+
+# Add self signed certificates(Minikube CA)
+COPY certificates/ca.crt /usr/local/share/ca-certificates/
 RUN update-ca-certificates
+# Remove unused certificates
+RUN rm /usr/local/share/ca-certificates/*
 
-# Set AWS cli TLS CA certificate
-ENV AWS_CA_BUNDLE=/usr/local/share/ca-certificates/minikube-ca.crt/minikube-ca.crt
-
-# Install aws client cli
-WORKDIR /tmp
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-RUN unzip -q awscliv2.zip
-RUN ./aws/install
-ENV PATH $PATH:/opt/aws/dist
-RUN mkdir -p /root/.aws
-COPY aws/config /root/.aws/
-COPY aws/credentials /root/.aws/
-WORKDIR /root
+# Set AWS cli TLS CA certificates with the self signed certificates
+ENV AWS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt

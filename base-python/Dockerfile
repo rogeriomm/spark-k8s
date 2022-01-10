@@ -1,6 +1,3 @@
-#
-# TODO: /opt/conda/envs/python_3_with_R/ssl/cacert.pem
-#
 ARG REPO
 ARG TAG
 
@@ -8,6 +5,7 @@ FROM ${REPO}spark-base:$TAG
 
 ########################################################################################################################
 # Install conda to manage python and R packages
+# FIXME Conda version. See https://github.com/apache/zeppelin/blob/master/scripts/docker/zeppelin/bin/Dockerfile
 ARG miniconda_version="py38_4.10.3"
 # Hashes via https://docs.conda.io/en/latest/miniconda_hashes.html
 ARG miniconda_sha256="935d72deb16e42739d69644977290395561b7a6db059b316958d97939e9bdf3d"
