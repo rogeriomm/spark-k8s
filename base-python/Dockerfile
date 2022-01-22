@@ -3,6 +3,8 @@ ARG TAG
 
 FROM ${REPO}spark-base:$TAG
 
+RUN apt-get install -y ipython3
+
 ########################################################################################################################
 # Install conda to manage python and R packages
 # FIXME Conda version. See https://github.com/apache/zeppelin/blob/master/scripts/docker/zeppelin/bin/Dockerfile

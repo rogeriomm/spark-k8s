@@ -16,7 +16,7 @@ mvn clean install dependency:copy-dependencies -Dhadoop.version=$HADOOP_VERSION
 cd ../../spark
 
 # shellcheck disable=SC1101
-./dev/make-distribution.sh --name custom-spark --pip \
+./dev/make-distribution.sh --name custom-spark --pip -DskipTests=true\
     -Phive -Phive-thriftserver -Pkubernetes -Dhadoop.version=$HADOOP_VERSION
 
 if [ -d ./dist ]; then
