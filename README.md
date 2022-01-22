@@ -21,6 +21,7 @@ helm install my-release spark-operator/spark-operator --namespace spark-operator
    
 # See also
    * [HIVE](docs/Hive.md)
+   * [Jupyter](docs/Jupyter.md)
 
 # References
    * [(MEDIUM) Build Your Own Big Data Ecosystem — Part 1](https://medium.com/geekculture/build-your-own-big-data-ecosystem-part-1-a19e4c778632)
