@@ -1,4 +1,5 @@
-FROM spark-py:11.0-jdk-slim-bullseye
+ARG SPARK_VERSION
+FROM spark-py:11.0-jdk-slim-bullseye-${SPARK_VERSION}
 
 ENV HADOOP_VERSION=3.3.1
 ENV HADOOP_HOME /opt/hadoop-${HADOOP_VERSION}

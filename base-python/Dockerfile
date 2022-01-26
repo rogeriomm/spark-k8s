@@ -1,7 +1,8 @@
 ARG REPO
 ARG TAG
+ARG SPARK_VERSION
 
-FROM ${REPO}spark-base:$TAG
+FROM ${REPO}spark-base-${SPARK_VERSION}:$TAG
 
 RUN apt-get install -y ipython3
 

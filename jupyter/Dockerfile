@@ -1,7 +1,8 @@
 ARG REPO
 ARG TAG
+ARG SPARK_VERSION
 
-FROM ${REPO}spark-base-python:$TAG
+FROM ${REPO}spark-base-python-${SPARK_VERSION}:$TAG
 
 # https://towardsdatascience.com/jupyter-notebook-spark-on-kubernetes-880af7e06351
 RUN pip install \
