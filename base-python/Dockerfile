@@ -20,9 +20,12 @@ RUN set -ex && \
     sha256sum --strict -c anaconda.sha256 && \
     bash miniconda.sh -b -p /opt/conda && \
     export PATH=/opt/conda/bin:$PATH && \
+    conda update --yes -n base -c defaults conda && \
     conda config --set always_yes yes --set changeps1 no && \
     conda info -a && \
-    conda install mamba -c conda-forge && \
+    conda install mamba -c conda-forge
+
+RUN export PATH=/opt/conda/bin:$PATH && \
     mamba env update -f /env_python_3_with_R.yml --prune && \
     # Cleanup
     rm -v miniconda.sh anaconda.sha256  && \

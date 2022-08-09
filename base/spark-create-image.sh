@@ -8,34 +8,45 @@
 set -x
 set -e
 
-HADOOP_VERSION=3.3.1
-SPARK_VERSION=3.1.3
-SPARK_MAJOR_VERSION=$(awk -F '.' '{print $1"."$2}' <<< $SPARK_VERSION)
-DELTA_VERSION=1.0.0
+make_image() {
+  HADOOP_VERSION=3.3.1
+  SPARK_VERSION=$1
+  SPARK_MAJOR_VERSION=$(awk -F '.' '{print $1"."$2}' <<< $SPARK_VERSION)
+  DELTA_VERSION=1.0.0
 
-TAG=11.0-jdk-slim-bullseye
+  TAG=11.0-jdk-slim-bullseye
 
-unset SPARK_HOME
+  unset SPARK_HOME
 
-cd dependencies
-mvn clean install dependency:copy-dependencies -Dhadoop.version=$HADOOP_VERSION -Ddelta.version=${DELTA_VERSION}
+  pushd .
 
-cd "../spark-$SPARK_MAJOR_VERSION"
-git checkout "v$SPARK_VERSION"
+  cd dependencies
+  mvn clean install dependency:copy-dependencies -Dhadoop.version=$HADOOP_VERSION -Ddelta.version=${DELTA_VERSION}
 
-# shellcheck disable=SC1101
-#./dev/make-distribution.sh --name custom-spark --pip -DskipTests=true\
-#    -Phive -Phive-thriftserver -Pkubernetes -Dhadoop.version=$HADOOP_VERSION
+  cd "../spark-$SPARK_MAJOR_VERSION"
+  git checkout "v$SPARK_VERSION"
 
-export SPARK_HOME="$(pwd)/dist"
+  # shellcheck disable=SC1101
+  #./dev/make-distribution.sh --name custom-spark --pip -DskipTests=true\
+  #    -Phive -Phive-thriftserver -Pkubernetes -Dhadoop.version=$HADOOP_VERSION
 
-if [ -d "$SPARK_HOME" ]; then
-  cd "$SPARK_HOME"
+  export SPARK_HOME="$(pwd)/dist"
 
-  ./bin/docker-image-tool.sh "$@" \
-                           -t "$TAG-$SPARK_VERSION" \
-                           -p kubernetes/dockerfiles/spark/bindings/python/Dockerfile \
-                           -b java_image_tag=$TAG \
-                           build
+  if [ -d "$SPARK_HOME" ]; then
+    cd "$SPARK_HOME"
 
-fi    
+    ./bin/docker-image-tool.sh -t "$TAG-$SPARK_VERSION" \
+                             -p kubernetes/dockerfiles/spark/bindings/python/Dockerfile \
+                             -b java_image_tag=$TAG \
+                             build
+  else
+     echo "Failed"
+     exit 1
+  fi
+
+  popd
+}
+
+#make_image 3.1.3
+#make_image 3.2.0
+make_image 3.3.0
