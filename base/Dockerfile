@@ -35,7 +35,7 @@ RUN apt-get install -y \
       inetutils-ping
 
 # Delta, Iceberg, AWS S3
-COPY dependencies/target/dependency/*.jar $SPARK_HOME/jars/
+#COPY dependencies/target/dependency/*.jar $SPARK_HOME/jars/
 
 # Install HADOOP
 RUN curl -O https://dist.apache.org/repos/dist/release/hadoop/common/KEYS

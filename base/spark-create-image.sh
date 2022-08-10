@@ -32,8 +32,6 @@ make_image() {
 
   export SPARK_HOME="$(pwd)/dist"
 
-  pwd
-
   cp ../dependencies/"$SPARK_MAJOR_VERSION"/target/dependency/*.jar "$SPARK_HOME"/jars
 
   if [ -d "$SPARK_HOME" ]; then
