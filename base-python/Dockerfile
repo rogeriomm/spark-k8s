@@ -33,8 +33,14 @@ RUN export PATH=/opt/conda/bin:$PATH && \
     find /opt/conda/ -follow -type f -name '*.a' -delete && \
     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
     mamba clean -ay
+
     # Allow to modify conda packages. This allows malicious code to be injected into other interpreter sessions, therefore it is disabled by default
     # chmod -R ug+rwX /opt/conda
+
+RUN export PATH=/opt/conda/bin:$PATH && \
+    mamba init bash && \
+    echo mamba activate python_3_with_R >> /root/.bashrc
+
 ENV PATH /opt/conda/envs/python_3_with_R/bin:/opt/conda/bin:$PATH
 # Add CONDA self signed certificates
 
