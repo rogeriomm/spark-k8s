@@ -6,12 +6,13 @@ dependencies:
   - python=3.8
   - pycodestyle
   - scipy
+  - numpy=1.19.5
   - grpcio
   - protobuf=3
   - pandasql=0.7.3
   - ipython
   - ipykernel
-  - jupyter_client
+  - jupyter_client=6.1.12
   - hvplot
   - pyyaml=3
   - plotnine
