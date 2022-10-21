@@ -4,12 +4,24 @@ ARG SPARK_VERSION
 
 FROM ${REPO}spark-base-python-${SPARK_VERSION}:$TAG
 
+# Install RUST compiler: https://www.rust-lang.org/tools/install
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > /tmp/install-rustup.sh && \
+    sh /tmp/install-rustup.sh -y
+# source "$HOME/.cargo/env"
+
+# https://crates.io/crates/evcxr_jupyter
+RUN source "$HOME/.cargo/env" &&  \
+    cargo install evcxr_jupyter && \
+    evcxr_jupyter --install \
+    rustup component add rust-src
+
 # https://towardsdatascience.com/jupyter-notebook-spark-on-kubernetes-880af7e06351
 RUN pip install \
-    notebook==6.2.0 \
-    ipynb==0.5.1 \
-    sparkmonitor==1.1.1 \
-    pyspark==3.1.2
+        notebook==6.2.0 \
+        ipynb==0.5.1 \
+        sparkmonitor==1.1.1 \
+        jupyter-server
 
 # install extension to monitor spark
 RUN jupyter nbextension install sparkmonitor --py --user --symlink
@@ -19,7 +31,9 @@ RUN ipython profile create && \
             echo "c.InteractiveShellApp.extensions.append('sparkmonitor.kernelextension')" >> \
                $(ipython profile locate default)/ipython_kernel_config.py
 
-RUN ln -s /usr/local/lib/python3.8/site-packages/sparkmonitor/listener_2.12.jar /opt/spark/jars/listener_2.12.jar
+# jupyter notebook --show-config
 
-#CMD jupyter notebook --port=8888 --ip=0.0.0.0 --no-browser --allow-root \
-#     --NotebookApp.token='' --notebook-dir=/lab/jupyter/notbook
+# /opt/conda/envs/python_3_with_R/lib/python3.8/site-packages/sparkmonitor/listener_2.12.jar ???
+RUN ln -s /opt/conda/envs/python_3_with_R/lib/python3.8/site-packages/sparkmonitor/listener_2.12.jar /opt/spark/jars/listener_2.12.jar
+
+#CMD jupyter notebook --port=8888 --ip=0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --notebook-dir=/lab/jupyter/notebook --NotebookApp.base_url='/jupyter/'
