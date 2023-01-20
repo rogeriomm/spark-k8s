@@ -1,15 +1,8 @@
 {
 	"version": "10",
 	"aliases": {
-		"gcs": {
-			"url": "https://storage.googleapis.com",
-			"accessKey": "YOUR-ACCESS-KEY-HERE",
-			"secretKey": "YOUR-SECRET-KEY-HERE",
-			"api": "S3v2",
-			"path": "dns"
-		},
 		"local": {
-			"url": "https://minio.minio-tenant-1.svc.cluster.local",
+			"url": "https://minio.minio-tenant-1.svc.cluster2.xpt",
 			"accessKey": "minio",
 			"secretKey": "awesomes3",
 			"api": "s3v4",
@@ -21,13 +14,6 @@
 			"secretKey": "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
 			"api": "S3v4",
 			"path": "auto"
-		},
-		"s3": {
-			"url": "https://s3.amazonaws.com",
-			"accessKey": "YOUR-ACCESS-KEY-HERE",
-			"secretKey": "YOUR-SECRET-KEY-HERE",
-			"api": "S3v4",
-			"path": "dns"
 		}
 	}
 }
