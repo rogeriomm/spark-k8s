@@ -49,6 +49,17 @@ make_image() {
   popd
 }
 
-make_image 3.1.3 3.3.1
-make_image 3.2.2 3.3.1
+check_docker() {
+  [[ ! -f $MINIKUBE_HOME/docker-env ]] || source $MINIKUBE_HOME/docker-env
+
+  if ! docker info; then
+    echo "Docker isn't working"
+    exit 1
+  fi
+}
+
+check_docker
+
+#make_image 3.1.3 3.3.1
+make_image 3.2.3 3.3.1
 #make_image 3.3.0 3.3.1

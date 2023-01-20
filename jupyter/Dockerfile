@@ -20,17 +20,20 @@ RUN source "$HOME/.cargo/env" &&  \
     rustup component add rust-src \
     cargo install polars
 
+
+ENV PYTHONPATH=/opt/spark/python/lib/pyspark.zip:/opt/spark/python/lib/py4j-0.10.9.5-src.zip:$PYTHONPATH
 # https://towardsdatascience.com/jupyter-notebook-spark-on-kubernetes-880af7e06351
 RUN pip install \
-        notebook==6.2.0 \
+        PyYAML==6.0 \
+        notebook==6.5.2 \
         ipynb==0.5.1 \
-        sparkmonitor==1.1.1 \
-        jupyter_server
+        sparkmonitor==2.1.1 \
+        jupyter_server==2.0.6
 
-# install extension to monitor spark
+# install extension to monitor spark: https://pypi.org/project/sparkmonitor/
 RUN jupyter nbextension install sparkmonitor --py --user --symlink
 RUN jupyter nbextension enable  sparkmonitor --py
-RUN jupyter serverextension enable --py --user --debug sparkmonitor
+#### RUN jupyter serverextension enable --py --user --debug sparkmonitor FIXME
 RUN ipython profile create && \
             echo "c.InteractiveShellApp.extensions.append('sparkmonitor.kernelextension')" >> \
                $(ipython profile locate default)/ipython_kernel_config.py

@@ -9,9 +9,9 @@ RUN apt-get install -y ipython3
 ########################################################################################################################
 # Install conda to manage python and R packages
 # FIXME Conda version. See https://github.com/apache/zeppelin/blob/master/scripts/docker/zeppelin/bin/Dockerfile
-ARG miniconda_version="py38_4.10.3"
+ARG miniconda_version="py38_4.12.0"
 # Hashes via https://docs.conda.io/en/latest/miniconda_hashes.html
-ARG miniconda_sha256="935d72deb16e42739d69644977290395561b7a6db059b316958d97939e9bdf3d"
+ARG miniconda_sha256="3190da6626f86eee8abf1b2fd7a5af492994eb2667357ee4243975cdbb175d7a"
 # Install python and R packages via conda
 COPY env_python_3_with_R.yml /env_python_3_with_R.yml
 RUN set -ex && \

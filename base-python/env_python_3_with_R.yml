@@ -14,7 +14,7 @@ dependencies:
   - ipykernel
   - jupyter_client=6.1.12
   - hvplot
-  - pyyaml=3
+  - pyyaml
   - plotnine
   - seaborn
   - intake

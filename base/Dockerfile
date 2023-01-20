@@ -34,6 +34,7 @@ RUN apt-get install -y \
       htop \
       inetutils-ping
 
+
 # Delta, Iceberg, AWS S3
 #COPY dependencies/target/dependency/*.jar $SPARK_HOME/jars/
 
