@@ -58,8 +58,10 @@ check_docker() {
   fi
 }
 
+export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=2g -Xss4096k"
+
 check_docker
 
-#make_image 3.1.3 3.3.1
-make_image 3.2.3 3.3.1
-#make_image 3.3.0 3.3.1
+#make_image 3.1.3 3.3.4
+make_image 3.2.3 3.3.4
+make_image 3.3.1 3.3.4
