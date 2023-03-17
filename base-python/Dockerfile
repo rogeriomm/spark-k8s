@@ -4,14 +4,18 @@ ARG SPARK_VERSION
 
 FROM ${REPO}spark-base-${SPARK_VERSION}:$TAG
 
-RUN apt-get install -y ipython3
+RUN apt-get update && \
+    apt-get install -y ipython3 && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get autoclean && \
+    apt-get clean
 
 ########################################################################################################################
 # Install conda to manage python and R packages
 # FIXME Conda version. See https://github.com/apache/zeppelin/blob/master/scripts/docker/zeppelin/bin/Dockerfile
-ARG miniconda_version="py38_4.12.0"
+ARG miniconda_version="py39_4.12.0"
 # Hashes via https://docs.conda.io/en/latest/miniconda_hashes.html
-ARG miniconda_sha256="3190da6626f86eee8abf1b2fd7a5af492994eb2667357ee4243975cdbb175d7a"
+ARG miniconda_sha256="78f39f9bae971ec1ae7969f0516017f2413f17796670f7040725dd83fcff5689"
 # Install python and R packages via conda
 COPY env_python_3_with_R.yml /env_python_3_with_R.yml
 RUN set -ex && \

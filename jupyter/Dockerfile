@@ -4,9 +4,11 @@ ARG SPARK_VERSION
 
 FROM ${REPO}spark-base-python-${SPARK_VERSION}:$TAG
 
-RUN apt-get install -y \
-    graphviz \
-    pkg-config
+RUN apt-get update && \
+    apt-get install -y graphviz pkg-config && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get autoclean && \
+    apt-get clean
 
 # Install RUST compiler: https://www.rust-lang.org/tools/install
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > /tmp/install-rustup.sh && \

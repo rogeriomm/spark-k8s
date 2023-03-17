@@ -1,7 +1,8 @@
 ARG SPARK_VERSION
+ARG HADOOP_VERSION
 FROM spark-py:11.0-jdk-slim-bullseye-${SPARK_VERSION}
 
-ENV HADOOP_VERSION=3.3.1
+ARG HADOOP_VERSION
 ENV HADOOP_HOME /opt/hadoop-${HADOOP_VERSION}
 ENV HADOOP_URL https://www.apache.org/dist/hadoop/common/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz
 
@@ -14,10 +15,6 @@ USER root
 RUN bash -c 'echo "LC_ALL=en_US.UTF-8" >> /etc/environment' ; \
     bash -c 'echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen' ; \
     bash -c 'echo "LANG=en_US.UTF-8" > /etc/locale.conf'
-
-RUN apt-get install -y locales
-
-RUN locale-gen en_US.UTF-8
 
 RUN apt-get install -y \
       net-tools \
@@ -32,8 +29,14 @@ RUN apt-get install -y \
       iptraf \
       tcpdump \
       htop \
-      inetutils-ping
+      inetutils-ping \
+      locales && \
+    # Cleanup
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get autoclean && \
+    apt-get clean
 
+RUN locale-gen en_US.UTF-8
 
 # Delta, Iceberg, AWS S3
 #COPY dependencies/target/dependency/*.jar $SPARK_HOME/jars/
