@@ -1,11 +1,11 @@
 ARG REPO
 ARG TAG
-ARG SPARK_VERSION
+ARG VERSION
 
-FROM ${REPO}spark-base-${SPARK_VERSION}:$TAG
+FROM ${REPO}spark-base-${VERSION}:${TAG}
 
 RUN apt-get update && \
-    apt-get install -y ipython3 && \
+    apt-get install -y ipython3 libarchive13 && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get autoclean && \
     apt-get clean

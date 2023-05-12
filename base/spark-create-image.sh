@@ -11,25 +11,25 @@ set -e
 make_image() {
   SPARK_VERSION=$1
   HADOOP_VERSION=$2
+  TAG=$3
 
-  SPARK_MAJOR_VERSION=$(awk -F '.' '{print $1"."$2}' <<< $SPARK_VERSION)
-
-  TAG=11.0-jdk-slim-bullseye
+  SPARK_MAJOR_VERSION=$(awk -F '.' '{print $1"."$2}' <<< "$SPARK_VERSION")
 
   unset SPARK_HOME
 
   pushd .
 
   cd "dependencies/${SPARK_MAJOR_VERSION}"
-  mvn clean install dependency:copy-dependencies -Dhadoop.version=$HADOOP_VERSION
+  mvn clean install dependency:copy-dependencies -Dhadoop.version="$HADOOP_VERSION"
 
   cd "../../spark-$SPARK_MAJOR_VERSION"
   git checkout "v$SPARK_VERSION"
 
   # shellcheck disable=SC1101
   ./dev/make-distribution.sh --name custom-spark --pip -DskipTests=true\
-      -Phive -Phive-thriftserver -Pkubernetes -Dhadoop.version=$HADOOP_VERSION
+      -Phive -Phive-thriftserver -Pkubernetes -Dhadoop.version="$HADOOP_VERSION"
 
+  # shellcheck disable=SC2155
   export SPARK_HOME="$(pwd)/dist"
 
   cp ../dependencies/"$SPARK_MAJOR_VERSION"/target/dependency/*.jar "$SPARK_HOME"/jars
@@ -39,7 +39,7 @@ make_image() {
 
     ./bin/docker-image-tool.sh -t "$TAG-$SPARK_VERSION" \
                              -p kubernetes/dockerfiles/spark/bindings/python/Dockerfile \
-                             -b java_image_tag=$TAG \
+                             -b java_image_tag="$TAG" \
                              build
   else
      echo "Failed to make docker image on directory ${SPARK_HOME}"
@@ -50,7 +50,7 @@ make_image() {
 }
 
 check_docker() {
-  [[ ! -f $MINIKUBE_HOME/docker-env ]] || source $MINIKUBE_HOME/docker-env
+  [[ ! -f "$MINIKUBE_HOME"/docker-env ]] || source "$MINIKUBE_HOME"/docker-env
 
   if ! docker info; then
     echo "Docker isn't working"
@@ -58,10 +58,11 @@ check_docker() {
   fi
 }
 
-export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=2g -Xss4096k"
+export MAVEN_OPTS="-Xss64m -Xmx2g -XX:ReservedCodeCacheSize=2g"
 
 check_docker
 
-#make_image 3.1.3 3.3.4
-make_image 3.2.3 3.2.4
-make_image 3.3.1 3.3.4
+make_image 3.2.4 3.2.4 11.0-jdk-slim-bullseye
+make_image 3.3.2 3.3.5 11.0-jdk-slim-bullseye
+make_image 3.4.0 3.3.5 11-jdk-focal
+

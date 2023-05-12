@@ -1,8 +1,8 @@
 ARG REPO
 ARG TAG
-ARG SPARK_VERSION
+ARG VERSION
 
-FROM ${REPO}spark-base-python-${SPARK_VERSION}:$TAG
+FROM ${REPO}spark-base-python-${VERSION}:$TAG
 
 RUN apt-get update && \
     apt-get install -y graphviz pkg-config && \
