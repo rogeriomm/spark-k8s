@@ -6,13 +6,13 @@ dependencies:
   - python=3.9
   - pycodestyle
   - scipy
-  - numpy=1.19.5
-  - grpcio
-  - protobuf=3
+  - numpy
+  - grpcio=1.38.1
+  - protobuf
   - pandasql=0.7.3
-  - ipython
-  - ipykernel
-  - jupyter_client=6.1.12
+  - pandas=1.5.3
+  - ipython=7.26.0
+  - ipykernel=6.2.0
   - hvplot
   - pyyaml
   - plotnine
@@ -25,6 +25,13 @@ dependencies:
   - pip
   - delta
   - plotly
+  - s3fs
+  - great-expectations
+  - sqlalchemy<2           #  great-expectations
+  - matplotlib=3.4.3
+  - jupyter_client=6.1.12
+  - jupyter_core
+  - bokeh
   - r-base=3
   - r-data.table
   - r-evaluate

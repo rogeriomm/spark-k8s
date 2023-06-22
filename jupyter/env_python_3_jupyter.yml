@@ -1,0 +1,41 @@
+name: python_3_with_R
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - jupyterlab
+  - jupyterhub
+  - notebook
+  - jupyter_server>=2.0.0
+  - jupyterlab-git
+  - polars
+  - altair
+  - beautifulsoup4
+  - bokeh
+  - bottleneck
+  - cloudpickle
+  - conda-forge::blas=*=openblas
+  - cython
+  - dask
+  - dill
+  - h5py
+  - ipympl
+  - ipywidgets
+  - matplotlib-base
+  - numba
+  - numexpr
+  - openpyxl
+  - pandas
+  - patsy
+  - protobuf
+  - pytables
+  - scikit-image
+  - scikit-learn
+  - scipy
+  - seaborn
+  - sqlalchemy
+  - statsmodels
+  - sympy
+  - widgetsnbextension
+  - xlrd

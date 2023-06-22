@@ -1,1 +1,0 @@
-mvn clean install dependency:copy-dependencies -Dhadoop.version=3.2.4

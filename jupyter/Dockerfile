@@ -1,3 +1,6 @@
+#
+# https://github.com/jupyter/docker-stacks/blob/main/scipy-notebook/Dockerfile
+#
 ARG REPO
 ARG TAG
 ARG VERSION
@@ -5,7 +8,19 @@ ARG VERSION
 FROM ${REPO}spark-base-python-${VERSION}:$TAG
 
 RUN apt-get update && \
-    apt-get install -y graphviz pkg-config && \
+    apt-get install -y graphviz pkg-config  \
+             # nbconvert dependencies
+             # https://nbconvert.readthedocs.io/en/latest/install.html#installing-tex
+             texlive-xetex texlive-fonts-recommended  texlive-plain-generic \
+             # Enable clipboard on Linux host systems
+             xclip  \
+             # for cython: https://cython.readthedocs.io/en/latest/src/quickstart/install.html
+             build-essential \
+             # for latex labels
+             cm-super \
+             dvipng \
+             # for matplotlib anim
+             ffmpeg && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get autoclean && \
     apt-get clean
@@ -22,25 +37,26 @@ RUN source "$HOME/.cargo/env" &&  \
     rustup component add rust-src \
     cargo install polars
 
-
 ENV PYTHONPATH=/opt/spark/python/lib/pyspark.zip:/opt/spark/python/lib/py4j-0.10.9.5-src.zip:$PYTHONPATH
 # https://towardsdatascience.com/jupyter-notebook-spark-on-kubernetes-880af7e06351
-RUN pip install \
-        PyYAML==6.0 \
-        notebook==6.5.2 \
-        ipynb==0.5.1 \
-        sparkmonitor==2.1.1 \
-        jupyter_server==2.0.6
+#RUN pip install \
+#        PyYAML==6.0 \
+#        notebook==6.5.4 \
+#        ipynb==0.5.1 \
+#        jupyter_server==2.5.0 \
+#        jupyterlab==3.6.3 \
+#        sparkmonitor==2.1.1 && \
+#        jupyter nbextension install sparkmonitor --py --user --symlink && \
+#        jupyter nbextension enable  sparkmonitor --py && \
+#        echo "c.InteractiveShellApp.extensions.append('sparkmonitor.kernelextension')" >> \
+#               $(ipython profile locate default)/ipython_kernel_config.py
+COPY env_python_3_jupyter.yml /env_python_3_jupyter.yml
 
-# install extension to monitor spark: https://pypi.org/project/sparkmonitor/
-RUN jupyter nbextension install sparkmonitor --py --user --symlink
-RUN jupyter nbextension enable  sparkmonitor --py
-#### RUN jupyter serverextension enable --py --user --debug sparkmonitor FIXME
-RUN ipython profile create && \
-            echo "c.InteractiveShellApp.extensions.append('sparkmonitor.kernelextension')" >> \
-               $(ipython profile locate default)/ipython_kernel_config.py
-
-RUN ln -s /opt/conda/envs/python_3_with_R/lib/python3.8/site-packages/sparkmonitor/listener_2.12.jar /opt/spark/jars/listener_2.12.jar
+RUN  mamba env update -f /env_python_3_jupyter.yml --prune && \
+     # Cleanup
+     find /opt/conda/ -follow -type f -name '*.a' -delete && \
+     find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
+     mamba clean -ay
 
 COPY start.sh /
 RUN chmod u+x /start.sh

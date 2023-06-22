@@ -17,8 +17,20 @@ helm install my-release spark-operator/spark-operator --namespace spark-operator
 ## com.amazonaws.SdkClientException: Unable to execute HTTP request: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target: Unable to execute HTTP request: PKIX path building failed
    * https://github.com/aws/aws-sdk-java/issues/2087: AmazonRDSClient.java: Unable to execute HTTP request: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
    * https://community.cloudera.com/t5/Community-Articles/How-to-configure-your-spark-application-to-use-Mongo-DB-with/ta-p/247296
-      * 5) Zeppelin (Optional)
    
+## AttributeError: 'Namespace' object has no attribute 'no_user'
+   * https://stackoverflow.com/questions/76000757/mamba-init-error-attributeerror-namespace-object-has-no-attribute-no-user
+   * https://kirenz.github.io/codelabs/codelabs/miniforge-setup/#0
+
+## java.lang.NoSuchMethodError: 'void io.netty.util.concurrent.SingleThreadEventExecutor.<init>(io.netty.util.concurrent.EventExecutorGroup
+   * https://spark.apache.org/docs/3.2.4/
+      * "For Python 3.9, Arrow optimization and pandas UDFs might not work due to the supported Python versions in Apache Arrow." 
+
+## How to fix org.apache.spark.sql.internal.SQLConf$.PARQUET_FIELD_ID_READ_ENABLED() when running Spark with Delta Lake?
+   * https://stackoverflow.com/questions/75260486/how-to-fix-org-apache-spark-sql-internal-sqlconf-parquet-field-id-read-enabled
+   * https://docs.delta.io/latest/releases.html
+   * https://libraries.io/maven/io.delta:delta-core_2.12
+   * https://mvnrepository.com/artifact/io.delta/delta-core_2.12/2.0.2
 # See also
    * [HIVE](docs/Hive.md)
    * [Jupyter](docs/Jupyter.md)
