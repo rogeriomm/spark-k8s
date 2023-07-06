@@ -20,8 +20,12 @@ make_image() {
   cd "spark-$SPARK_MAJOR_VERSION"
   git checkout "v$SPARK_VERSION"
 
+  ./dev/change-scala-version.sh 2.12
   ./dev/make-distribution.sh --name custom-spark --pip -DskipTests=true -Dio.netty.tryReflectionSetAccessible=true \
-      -Phive -Phive-thriftserver -Pkubernetes -Dhadoop.version="$HADOOP_VERSION"
+      -Phive \
+      -Phive-thriftserver \
+      -Pkubernetes \
+      -Dhadoop.version="$HADOOP_VERSION" \
 
   export SPARK_HOME="$(pwd)/dist"
 
@@ -51,7 +55,7 @@ check_docker() {
 
 check_java() {
   java_version=$(java -version 2>&1 | grep -i version | cut -d'"' -f2 | cut -d'.' -f1-2)
-  if [ "$java_version" != "11" ]; then
+  if [ "$java_version" != "11.0" ]; then
     exit 2
   fi
 }
@@ -63,8 +67,5 @@ check_java
 check_docker
 
 make_image 3.2.4 3.2.4 11.0.16-jdk-slim-bullseye
-#make_image 3.3.2 3.3.5 11.0.16-jdk-slim-bullseye
-#make_image 3.4.0 3.3.5 11.0.16-jdk-slim-bullseye
-#
-#
-#
+make_image 3.3.2 3.3.6 11.0.16-jdk-slim-bullseye
+make_image 3.4.1 3.3.6 11.0.19_7-jdk-jammy

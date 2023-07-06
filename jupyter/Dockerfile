@@ -38,18 +38,7 @@ RUN source "$HOME/.cargo/env" &&  \
     cargo install polars
 
 ENV PYTHONPATH=/opt/spark/python/lib/pyspark.zip:/opt/spark/python/lib/py4j-0.10.9.5-src.zip:$PYTHONPATH
-# https://towardsdatascience.com/jupyter-notebook-spark-on-kubernetes-880af7e06351
-#RUN pip install \
-#        PyYAML==6.0 \
-#        notebook==6.5.4 \
-#        ipynb==0.5.1 \
-#        jupyter_server==2.5.0 \
-#        jupyterlab==3.6.3 \
-#        sparkmonitor==2.1.1 && \
-#        jupyter nbextension install sparkmonitor --py --user --symlink && \
-#        jupyter nbextension enable  sparkmonitor --py && \
-#        echo "c.InteractiveShellApp.extensions.append('sparkmonitor.kernelextension')" >> \
-#               $(ipython profile locate default)/ipython_kernel_config.py
+
 COPY env_python_3_jupyter.yml /env_python_3_jupyter.yml
 
 RUN  mamba env update -f /env_python_3_jupyter.yml --prune && \
@@ -57,6 +46,10 @@ RUN  mamba env update -f /env_python_3_jupyter.yml --prune && \
      find /opt/conda/ -follow -type f -name '*.a' -delete && \
      find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
      mamba clean -ay
+
+
+RUN cd /usr/local/bin && curl -Lo coursier https://git.io/coursier-cli && chmod +x ./coursier && \
+    coursier launch --fork almond -- --install
 
 COPY start.sh /
 RUN chmod u+x /start.sh
