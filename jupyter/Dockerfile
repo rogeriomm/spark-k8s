@@ -7,6 +7,10 @@ ARG VERSION
 
 FROM ${REPO}spark-base-python-${VERSION}:$TAG
 
+# Almond Scala version: 3.3.0, 2.13
+ARG SCALA_VERSION="3.3.0"
+ARG ALMOND_VERSION="0.14.0-RC12"
+
 RUN apt-get update && \
     apt-get install -y graphviz pkg-config  \
              # nbconvert dependencies
@@ -47,9 +51,8 @@ RUN  mamba env update -f /env_python_3_jupyter.yml --prune && \
      find /opt/conda/ -follow -type f -name '*.js.map' -delete && \
      mamba clean -ay
 
-
 RUN cd /usr/local/bin && curl -Lo coursier https://git.io/coursier-cli && chmod +x ./coursier && \
-    coursier launch --fork almond -- --install
+    coursier launch --fork almond:${ALMOND_VERSION} --scala ${SCALA_VERSION} -- --install
 
 COPY start.sh /
 RUN chmod u+x /start.sh
