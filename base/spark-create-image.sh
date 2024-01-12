@@ -66,6 +66,7 @@ check_java
 
 check_docker
 
-make_image 3.2.4 3.2.4 11.0.16-jdk-slim-bullseye
-make_image 3.3.2 3.3.6 11.0.16-jdk-slim-bullseye
-make_image 3.4.1 3.3.6 11.0.19_7-jdk-jammy
+make_image 3.2.4 3.2.4 11.0.16-jdk-slim-bullseye # Debian 11.7 bullseye
+make_image 3.3.4 3.3.6 11.0.16-jdk-slim-bullseye # Debian 11.7 bullseye
+make_image 3.4.2 3.3.6 11.0.21_9-jdk-jammy # Ubuntu 22.04.3 LTS (Jammy Jellyfish)
+make_image 3.5.0 3.3.6 11.0.21_9-jdk-jammy # Ubuntu 22.04.3 LTS (Jammy Jellyfish)

@@ -9,10 +9,13 @@ FROM ${REPO}spark-base-python-${VERSION}:$TAG
 
 # Almond Scala version: 3.3.0, 2.13
 ARG SCALA_VERSION="3.3.0"
-ARG ALMOND_VERSION="0.14.0-RC12"
+ARG ALMOND_VERSION="0.14.0-RC14"
 
 RUN apt-get update && \
-    apt-get install -y graphviz pkg-config  \
+    apt-get install -y \
+             # jupyterlab-git server extension
+             git \
+             graphviz pkg-config \
              # nbconvert dependencies
              # https://nbconvert.readthedocs.io/en/latest/install.html#installing-tex
              texlive-xetex texlive-fonts-recommended  texlive-plain-generic \
@@ -22,9 +25,9 @@ RUN apt-get update && \
              build-essential \
              # for latex labels
              cm-super \
-             dvipng \
-             # for matplotlib anim
-             ffmpeg && \
+             dvipng && \
+             # for matplotlib anim \
+             #ffmpeg && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get autoclean && \
     apt-get clean

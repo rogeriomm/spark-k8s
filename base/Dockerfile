@@ -22,9 +22,14 @@ ENV LANG=en_US.UTF-8 \
 
 USER root
 
+RUN echo "deb http://security.ubuntu.com/ubuntu focal-security main" | tee /etc/apt/sources.list.d/focal-security.list
+
 RUN bash -c 'echo "LC_ALL=en_US.UTF-8" >> /etc/environment' ; \
     bash -c 'echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen' ; \
     bash -c 'echo "LANG=en_US.UTF-8" > /etc/locale.conf' && \
+    \
+    echo "Fix: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 3B4FE6ACC0B21F32 NO_PUBKEY 871920D1991BC93C" && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32 2> /dev/null && \
     \
     apt-get update && apt-get install --yes --no-install-recommends \
        curl wget sudo net-tools netcat gnupg vim unzip ack iptraf tcpdump htop inetutils-ping locales tini && \
