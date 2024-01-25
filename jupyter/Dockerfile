@@ -7,8 +7,8 @@ ARG VERSION
 
 FROM ${REPO}spark-base-python-${VERSION}:$TAG
 
-# Almond Scala version: 3.3.0, 2.13
-ARG SCALA_VERSION="3.3.0"
+# Almond Scala version: 3.3.1, 2.13
+ARG SCALA_VERSION="3.3.1"
 ARG ALMOND_VERSION="0.14.0-RC14"
 
 RUN apt-get update && \
@@ -25,12 +25,27 @@ RUN apt-get update && \
              build-essential \
              # for latex labels
              cm-super \
-             dvipng && \
+             dvipng \
              # for matplotlib anim \
              #ffmpeg && \
+             \
+             kafkacat \
+             jq \
+             && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get autoclean && \
     apt-get clean
+
+# Install https://github.com/mikefarah/yq
+RUN cd /tmp && wget https://github.com/mikefarah/yq/releases/download/v4.40.5/yq_linux_amd64.tar.gz && \
+    tar -zxf yq_linux_amd64.tar.gz && \
+    mv yq_linux_amd64 /usr/local/bin/yq
+
+# Install ASDF: https://asdf-vm.com/guide/getting-started.html
+RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
+RUN sh -c "echo . '$HOME/.asdf/asdf.sh' >> ~/.bashrc"
+RUN . $HOME/.asdf/asdf.sh && asdf plugin add kubectl && \
+      asdf install kubectl 1.28.3
 
 # Install RUST compiler: https://www.rust-lang.org/tools/install
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > /tmp/install-rustup.sh && \
