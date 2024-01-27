@@ -31,6 +31,7 @@ RUN apt-get update && \
              \
              kafkacat \
              jq \
+             strace \
              && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get autoclean && \
@@ -45,7 +46,8 @@ RUN cd /tmp && wget https://github.com/mikefarah/yq/releases/download/v4.40.5/yq
 RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
 RUN sh -c "echo . '$HOME/.asdf/asdf.sh' >> ~/.bashrc"
 RUN . $HOME/.asdf/asdf.sh && asdf plugin add kubectl && \
-      asdf install kubectl 1.28.3
+      asdf install kubectl 1.28.3 && \
+      asdf global kubectl 1.28.3
 
 # Install RUST compiler: https://www.rust-lang.org/tools/install
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > /tmp/install-rustup.sh && \
@@ -73,6 +75,9 @@ RUN cd /usr/local/bin && curl -Lo coursier https://git.io/coursier-cli && chmod 
     coursier launch --fork almond:${ALMOND_VERSION} --scala ${SCALA_VERSION} -- --install
 
 COPY start.sh /
+
+ENV PATH=$PATH:/root/.cargo/bin:/root/.asdf/shims:/root/.asdf/bin
+
 RUN chmod u+x /start.sh
 
 CMD ["/start.sh"]
